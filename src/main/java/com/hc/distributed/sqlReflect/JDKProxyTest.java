@@ -1,6 +1,6 @@
 package com.hc.distributed.sqlReflect;
 
-import com.hc.distributed.service.FileService;
+import com.hc.distributed.utils.VerifyUtil;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.RoundEnvironment;
@@ -18,10 +18,10 @@ public class JDKProxyTest extends AbstractProcessor {
     }
 
     public static void proxy1() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
-        Class<?> proxyClass= Proxy.getProxyClass(JDKProxyTest.class.getClassLoader(), HelloWord.class);
+        Class<?> proxyClass= Proxy.getProxyClass(JDKProxyTest.class.getClassLoader(), HelloWordDao.class);
         final Constructor<?> cons = proxyClass.getConstructor(InvocationHandler.class);
-//        final InvocationHandler ih = new DynamicProxy(new HelloWordImpl());
-//        HelloWord helloWord= (HelloWord)cons.newInstance(ih);
+           //        final InvocationHandler ih = new DynamicProxy(new HelloWordImpl());
+//        HelloWordDao helloWord= (HelloWordDao)cons.newInstance(ih);
     }
 
     /**
@@ -34,15 +34,15 @@ public class JDKProxyTest extends AbstractProcessor {
         //下面是更简单的一种写法，本质上和上面是一样的
 //        DynamicProxy inter = new DynamicProxy(new HelloWordImpl());
 //
-//        HelloWord helloWord = (HelloWord) Proxy.newProxyInstance(HelloWord.class.getClassLoader(), new Class[] {HelloWord.class, FileService.class}, inter);
+//        HelloWordDao helloWord = (HelloWordDao) Proxy.newProxyInstance(HelloWordDao.class.getClassLoader(), new Class[] {HelloWordDao.class, FileService.class}, inter);
 
-//        FileService fileService = (FileService) Proxy.newProxyInstance(FileService.class.getClassLoader(), new Class[] {HelloWord.class, FileService.class}, inter);
+//        FileService fileService = (FileService) Proxy.newProxyInstance(FileService.class.getClassLoader(), new Class[] {HelloWordDao.class, FileService.class}, inter);
     }
 
     public static void proxyAnnotation1() {
         System.getProperties().put("sun.misc.ProxyGenerator.saveGeneratedFiles","true");
 //        DynamicProxy inter = new DynamicProxy(new HelloWordImpl());
-//        HelloWord helloWord = (HelloWord) Proxy.newProxyInstance(HelloWord.class.getClassLoader(), new Class[] {HelloWord.class, FileService.class}, inter);
+//        HelloWordDao helloWord = (HelloWordDao) Proxy.newProxyInstance(HelloWordDao.class.getClassLoader(), new Class[] {HelloWordDao.class, FileService.class}, inter);
 //        System.out.println(helloWord.sayHello("3"));
 //        System.out.println(helloWord.update("3", 4));
 //        System.out.println(helloWord.delete(3));
@@ -52,13 +52,13 @@ public class JDKProxyTest extends AbstractProcessor {
     public static void proxyAnnotation2() {
         System.getProperties().put("sun.misc.ProxyGenerator.saveGeneratedFiles","true");
 //        DynamicProxy inter = new DynamicProxy(new HelloWordImpl());
-//        HelloWord helloWord = (HelloWord) Proxy.newProxyInstance(HelloWord.class.getClassLoader(), new Class[] {HelloWord.class, FileService.class}, inter);
+//        HelloWordDao helloWord = (HelloWordDao) Proxy.newProxyInstance(HelloWordDao.class.getClassLoader(), new Class[] {HelloWordDao.class, FileService.class}, inter);
 //        helloWord.sayHello(4);
     }
 
     public static void noImpl() {
-        HelloWord helloWord = (HelloWord) new SqlMapper().getInstance(HelloWord.class);
-        System.out.println(helloWord.sayHello("3"));
+        HelloWordDao helloWordDao = (HelloWordDao) new SqlMapper().getInstance(HelloWordDao.class);
+        System.out.println(helloWordDao.sayHello("3"));
     }
 
     /**

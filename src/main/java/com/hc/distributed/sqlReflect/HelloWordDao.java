@@ -4,7 +4,7 @@ package com.hc.distributed.sqlReflect;
 import java.util.List;
 
 @DaoMapper
-public interface HelloWord {
+public interface HelloWordDao {
 
     @SqlAnnotation("SELECT * FROM user WHERE user_name = #{userName}")
     User sayHello(@SqlParam("userName") String userName);

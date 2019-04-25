@@ -12,32 +12,12 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class DynamicProxy implements InvocationHandler {
-
-    private Object target;
-
-    private Class<?> clazz = null;
-
     DynamicProxy() {
 
     }
 
-    DynamicProxy(Object target) {
-        this.target = target;
-    }
-
-    public Object getProxyInstance(Class<?> cls) {
-        if (null != clazz) {
-            return Proxy.newProxyInstance(clazz.getClassLoader(), clazz.getInterfaces(), this);
-        }
-        System.out.println(target.getClass());
-        return Proxy.newProxyInstance(target.getClass().getClassLoader(), new Class[]{target.getClass()}, this);
-    }
-
-
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        Class<?> clz = getClass();
-        clz.getAnnotation(SqlParam.class);
         Annotation[] annotations = method.getAnnotations();
         String sql = "";
 
@@ -56,7 +36,7 @@ public class DynamicProxy implements InvocationHandler {
         PreparedStatement ps = SqlUtil.sqlHandel(sql, parameters, args, con);
 
         //TODO void类型会出事
-        Object o = null;
+        Object o;
 
         try {
             switch (getType(sql)) {
