@@ -1,0 +1,64 @@
+# Druid 配置
+spring:
+  profiles:
+    active: test
+
+  devtools:
+    restart:
+      enabled: true
+      exclude: WEB-INF/**
+
+  messages:
+    #指定message的basename，多个以逗号分隔，如果不加包名的话，默认从classpath路径开始，默认: messages
+    basename: i18n/messages_zh_CN
+
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+
+
+# MyBatis 配置
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.qg.exclusiveplug.model
+  configuration.map-underscore-to-camel-case: true
+
+hadoop:
+  uri: hdfs://192.168.31.19:9000
+#Netty 配置
+netty:
+  tcp-port: 8090
+  boss-count: 1
+  worker-count: 10
+  keep-alive: true
+  backlog: 100
+
+
+logging:
+  file: /root/exclusive_plug/mylog.log
+
+#阿里云短信配置
+aliyun:
+  sms:
+    accessKeyId: LTAIAU2HSahyGWkS
+    accessKeySecret: OG4kUcuHwjYVuXbP3OBWurSBjb3S5s
+    product: Dysmsapi
+    domain: dysmsapi.aliyuncs.com
+    regionId: cn-hangzhou
+    signName: QG智能排插
+    dateFormat: yyyy-MM-dd
+    endpointName: cn-hangzhou
+    templateCode: SMS_148380226
+
+hdfs:
+  uriPath: hdfs://192.168.31.19:9000
+  hadoopHomeDir: E:\\JavaWeb\\hadoop_common_2.2.0
+
+server:
+  port: 8443
+#  ssl:
+#    key-store: classpath:215069416590721.pfx
+#    key-store-type: PKCS12
+#    key-store-password: 215069416590721
+
