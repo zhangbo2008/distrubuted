@@ -1,23 +1,19 @@
+/*
 package com.hc.distributed.utils;
 
 
 import com.hc.distributed.exceptions.CheckException;
-import com.hc.distributed.utils.VerifyUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.csource.common.MyException;
 import org.csource.common.NameValuePair;
 import org.csource.fastdfs.*;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.web.multipart.MultipartFile;
 import reactor.util.annotation.Nullable;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 
 @Slf4j
-@Configuration
 public class FastDFSUtil {
 
     private TrackerClient trackerClient = new TrackerClient();
@@ -77,10 +73,12 @@ public class FastDFSUtil {
         }
     }
 
-    /**
+    */
+/**
      * 获取文件的原始类型
      * @return
-     */
+     *//*
+
     public NameValuePair[] getFileMate(String groupName, String filePath) throws IOException, MyException {
         try {
             return storageClient.get_metadata(groupName, filePath);
@@ -108,3 +106,4 @@ public class FastDFSUtil {
         }
     }
 }
+*/

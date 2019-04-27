@@ -1,7 +1,6 @@
 package com.hc.distributed.sqlReflect;
 
 import com.hc.distributed.exceptions.ErrorException;
-import org.springframework.cglib.proxy.MethodProxy;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.*;

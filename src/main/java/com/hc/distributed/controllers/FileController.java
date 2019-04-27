@@ -1,3 +1,4 @@
+/*
 package com.hc.distributed.controllers;
 
 
@@ -71,3 +72,4 @@ public class FileController {
         return new ResultBean<>();
     }
 }
+*/

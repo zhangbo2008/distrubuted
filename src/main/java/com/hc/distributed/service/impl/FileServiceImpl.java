@@ -1,3 +1,4 @@
+/*
 package com.hc.distributed.service.impl;
 
 import com.hc.distributed.exceptions.CheckException;
@@ -72,3 +73,4 @@ public class FileServiceImpl implements FileService {
         }
     }
 }
+*/

@@ -3,14 +3,10 @@ package com.hc.distributed.controllers;
 import com.hc.distributed.dtos.Data;
 import com.hc.distributed.dtos.RequestBean;
 import com.hc.distributed.dtos.ResultBean;
-import com.hc.distributed.exceptions.CheckException;
 import com.hc.distributed.service.UserService;
-import org.csource.common.MyException;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import java.io.IOException;
 
 @CrossOrigin
 @RestController

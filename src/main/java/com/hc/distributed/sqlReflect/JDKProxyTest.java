@@ -1,6 +1,5 @@
 package com.hc.distributed.sqlReflect;
 
-import com.hc.distributed.utils.VerifyUtil;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.RoundEnvironment;

@@ -1,16 +1,11 @@
 package com.hc.distributed.sqlReflect;
 
-import com.hc.distributed.utils.VerifyUtil;
-import com.sun.org.apache.xpath.internal.operations.Bool;
-
 import java.lang.reflect.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 import java.util.regex.Pattern;
 
 /**
