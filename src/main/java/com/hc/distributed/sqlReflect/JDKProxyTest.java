@@ -4,6 +4,7 @@ package com.hc.distributed.sqlReflect;
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.TypeElement;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
@@ -11,7 +12,7 @@ import java.lang.reflect.Proxy;
 import java.util.Set;
 
 public class JDKProxyTest extends AbstractProcessor {
-    public static void main(String[] args) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+    public static void main(String[] args) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException, UnsupportedEncodingException, ClassNotFoundException {
 //        proxyAnnotation1();
         noImpl();
     }
@@ -55,8 +56,9 @@ public class JDKProxyTest extends AbstractProcessor {
 //        helloWord.sayHello(4);
     }
 
-    public static void noImpl() {
-        HelloWordDao helloWordDao = (HelloWordDao) new SqlMapper().getInstance(HelloWordDao.class);
+    public static void noImpl() throws UnsupportedEncodingException, ClassNotFoundException {
+        new SqlMapper().getClasses("com.hc.distributed");
+        HelloWordDao helloWordDao = (HelloWordDao) new SqlMapper().getInstance();
         System.out.println(helloWordDao.sayHello("3"));
     }
 

@@ -6,14 +6,8 @@ import javax.lang.model.element.*;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 import javax.tools.Diagnostic;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
-/**
- * asdas dsadasdas
- */
 public class InterfaceProcessor extends AbstractProcessor {
 
     private Types typeUtils;
