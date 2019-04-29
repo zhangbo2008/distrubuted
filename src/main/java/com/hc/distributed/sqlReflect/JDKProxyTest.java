@@ -56,9 +56,13 @@ public class JDKProxyTest extends AbstractProcessor {
 //        helloWord.sayHello(4);
     }
 
-    public static void noImpl() throws UnsupportedEncodingException, ClassNotFoundException {
-        new SqlMapper().getClasses("com.hc.distributed");
-        HelloWordDao helloWordDao = (HelloWordDao) new SqlMapper().getInstance();
+    @AutoDao
+    static HelloWordDao helloWordDao;
+
+
+    public static void noImpl() throws IllegalAccessException {
+        SqlMapper.initMapperDao();
+        SqlMapper.initAutpDao();
         System.out.println(helloWordDao.sayHello("3"));
     }
 
