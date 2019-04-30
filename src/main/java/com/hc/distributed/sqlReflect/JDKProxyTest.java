@@ -59,11 +59,10 @@ public class JDKProxyTest extends AbstractProcessor {
     @AutoDao
     static HelloWordDao helloWordDao;
 
-
     public static void noImpl() throws IllegalAccessException {
-        SqlMapper.initMapperDao();
-        SqlMapper.initAutpDao();
-        System.out.println(helloWordDao.sayHello("3"));
+        SqlMapper.initSql();
+        User user = helloWordDao.sayHello("3");
+        System.out.println(user);
     }
 
     /**

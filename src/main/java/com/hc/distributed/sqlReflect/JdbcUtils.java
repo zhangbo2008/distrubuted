@@ -1,7 +1,5 @@
 package com.hc.distributed.sqlReflect;
 
-import java.io.Closeable;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -24,7 +22,7 @@ public class JdbcUtils {
 
     // 连接数据库
     public static Connection getCon() throws SQLException {
-        Connection con = null;
+        Connection con;
         con = DriverManager.getConnection(url, user, password);
         System.out.println("数据库连接成功");
         return con;

@@ -29,6 +29,11 @@ public class SqlMapper {
         }
     }
 
+    public static void initSql() throws IllegalAccessException {
+        initMapperDao();
+        initAutpDao();
+    }
+
     public static void  initMapperDao() {
         for (Class<?> clazz : classes) {
             Annotation[] annotations = clazz.getAnnotations();
@@ -80,10 +85,8 @@ public class SqlMapper {
             String protocol = url.getProtocol();
             if ("file".equals(protocol)) {
                 String filePath = URLDecoder.decode(url.getFile(), "UTF-8");
-                System.out.println("filePath : " + filePath);
                 findAndClassesInPackageByFile(packageName, filePath, recursive, classes);
             }
-            System.out.println("protocol : " + url.getProtocol());
         }
         return classes;
     }
