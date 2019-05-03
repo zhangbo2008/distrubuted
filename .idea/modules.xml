@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/distributed.iml" filepath="$PROJECT_DIR$/distributed.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/distributed.iml" filepath="$PROJECT_DIR$/.idea/distributed.iml" />
+      <module fileurl="file://$PROJECT_DIR$/hc-basic/hc-basic.iml" filepath="$PROJECT_DIR$/hc-basic/hc-basic.iml" />
+      <module fileurl="file://$PROJECT_DIR$/hc-sso/hc-sso.iml" filepath="$PROJECT_DIR$/hc-sso/hc-sso.iml" />
     </modules>
   </component>
 </project>

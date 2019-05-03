@@ -7,10 +7,14 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="distributed" />
+        <module name="hc-basic" />
+        <module name="hc-sso" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="distributed" target="1.8" />
+      <module name="hc-basic" target="1.8" />
+      <module name="hc-sso" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
