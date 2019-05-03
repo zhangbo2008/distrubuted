@@ -1,15 +1,15 @@
-package com.hc.hcbasic.service.impl;
+package com.hc.hcsso.service.impl;
 
-import com.hc.hcbasic.constant.UserStatusEnum;
-import com.hc.hcbasic.dao.UserDao;
-import com.hc.hcbasic.dtos.Data;
-import com.hc.hcbasic.dtos.RequestBean;
-import com.hc.hcbasic.exceptions.CheckException;
-import com.hc.hcbasic.model.User;
-import com.hc.hcbasic.service.UserService;
-import com.hc.hcbasic.utils.LocaleMessageSourceUtil;
 import com.hc.hccommon.utils.UserVerfiyUtil;
 import com.hc.hccommon.utils.VerifyUtil;
+import com.hc.hcsso.constant.UserStatusEnum;
+import com.hc.hcsso.dao.UserDao;
+import com.hc.hcsso.dtos.Data;
+import com.hc.hcsso.dtos.RequestBean;
+import com.hc.hcsso.exceptions.CheckException;
+import com.hc.hcsso.model.User;
+import com.hc.hcsso.service.UserService;
+import com.hc.hcsso.utils.LocaleMessageSourceUtil;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService {
             return loginImpl(user);
         }
 
-        throw new CheckException(localeMessageSourceUtil.getMessage(UserStatusEnum.PARAMETER_ERROR.UserStatusEnum()));
+        throw new CheckException(localeMessageSourceUtil.getMessage(UserStatusEnum.PARAMETER_ERROR.getMsg()));
     }
 
     private Data loginImpl(User user) {
@@ -40,8 +40,9 @@ public class UserServiceImpl implements UserService {
         user = userDao.listUserByUAccountAndPassword(account, password);
 
         if (!UserVerfiyUtil.checkNull(user)) {
-            throw new CheckException(localeMessageSourceUtil.getMessage(UserStatusEnum.USER_ACCOUNT_ERROR.UserStatusEnum()));
+            throw new CheckException(localeMessageSourceUtil.getMessage(UserStatusEnum.USER_ACCOUNT_ERROR.getMsg()));
         }
+
         return new Data(user);
     }
 
@@ -53,14 +54,14 @@ public class UserServiceImpl implements UserService {
             return registerImpl(user);
         }
 
-        throw new CheckException(UserStatusEnum.PARAMETER_ERROR.UserStatusEnum());
+        throw new CheckException(UserStatusEnum.PARAMETER_ERROR.getMsg());
     }
 
     private int registerImpl(User user) {
         try {
             return userDao.insertUser(user);
         } catch (Exception e) {
-            throw new CheckException(UserStatusEnum.USER_HAS_REGISTER.UserStatusEnum());
+            throw new CheckException(UserStatusEnum.USER_HAS_REGISTER.getMsg());
         }
     }
 

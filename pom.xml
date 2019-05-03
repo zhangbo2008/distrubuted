@@ -20,6 +20,7 @@
     <modules>
         <module>hc-sso</module>
         <module>hc-basic</module>
+        <module>hc-common</module>
     </modules>
 
     <properties>

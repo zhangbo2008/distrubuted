@@ -7,9 +7,9 @@
         <artifactId>distributed</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-    <artifactId>hc-sso</artifactId>
+    <artifactId>hc-common</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>hc-sso</name>
+    <name>hc-common</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>
@@ -19,24 +19,8 @@
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-groovy-templates</artifactId>
+            <artifactId>spring-boot-starter</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.mybatis.spring.boot</groupId>
-            <artifactId>mybatis-spring-boot-starter</artifactId>
-            <version>2.0.1</version>
-        </dependency>
-        <dependency>
-            <groupId>com.hc</groupId>
-            <artifactId>hc-common</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
-
     </dependencies>
 
     <build>
