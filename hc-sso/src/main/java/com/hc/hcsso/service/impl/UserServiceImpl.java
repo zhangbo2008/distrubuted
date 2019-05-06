@@ -180,7 +180,7 @@ public class UserServiceImpl implements UserService {
 
     private Data tokenImpl(String token, String clientUrl) {
         if (remoteValid(token, clientUrl)) {
-            return new Data();
+            return new Data().setToken(token).setClientUrl(clientUrl);
         }
         throw new ErrorException("valid error");
     }

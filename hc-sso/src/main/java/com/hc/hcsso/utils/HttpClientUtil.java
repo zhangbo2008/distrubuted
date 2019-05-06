@@ -2,6 +2,7 @@ package com.hc.hcsso.utils;
 
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.hc.hccommon.utils.VerifyUtil;
 import com.hc.hcsso.dtos.Data;
 import com.hc.hcsso.dtos.RequestBean;
@@ -17,6 +18,7 @@ import org.apache.http.util.EntityUtils;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 
 
 @Service("httpClientUtil")
@@ -64,7 +66,10 @@ public class HttpClientUtil {
             // 判断返回状态是否为200
             if (response.getStatusLine().getStatusCode() == 200) {
                 strJson = EntityUtils.toString(entity, "UTF-8").trim();
-                ResultBean<Data> resultBean = VerifyUtil.cast(gson.fromJson(strJson, ResultBean.class));
+                Type type = new TypeToken<ResultBean<Data>>() {
+                }.getType();
+                ResultBean<Data> resultBean = VerifyUtil.cast(gson.fromJson(strJson, type));
+
                 if (null != response.getFirstHeader("x-auth-token")) {
                     if (null == resultBean.getData()) {
                         resultBean.setData(new Data());
