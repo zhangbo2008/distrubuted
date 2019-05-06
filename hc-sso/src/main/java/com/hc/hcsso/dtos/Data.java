@@ -23,5 +23,5 @@ public class Data {
 
     String clientUrl;
 
-    String xAuthToken;
+    String authToken;
 }

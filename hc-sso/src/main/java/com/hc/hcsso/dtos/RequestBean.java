@@ -16,4 +16,6 @@ public class RequestBean {
     String token;
 
     String clientUrl;
+
+    String authToken;
 }

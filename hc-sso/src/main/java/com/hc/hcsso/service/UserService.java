@@ -17,4 +17,6 @@ public interface UserService {
     Data logout(RequestBean requestBean);
 
     Data token(RequestBean requestBean);
+
+    Data subLogout(RequestBean requestBean);
 }

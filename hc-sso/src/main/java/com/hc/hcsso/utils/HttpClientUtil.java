@@ -6,6 +6,7 @@ import com.hc.hccommon.utils.VerifyUtil;
 import com.hc.hcsso.dtos.Data;
 import com.hc.hcsso.dtos.RequestBean;
 import com.hc.hcsso.dtos.ResultBean;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -13,14 +14,13 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 
 @Service("httpClientUtil")
+@Slf4j
 public class HttpClientUtil {
 
     /**
@@ -31,10 +31,11 @@ public class HttpClientUtil {
      * @return
      * @throws IOException
      */
-    public ResultBean<Data> postAction(String url, RequestBean requestData) throws IOException, IllegalAccessException, InstantiationException {
+    public ResultBean<Data> postAction(String url, RequestBean requestData) throws IOException {
         // 将Json对象转换为字符串
         Gson gson = new Gson();
         String strJson = gson.toJson(requestData, requestData.getClass());
+        log.info("httpClient发送数据：{}", strJson);
         //使用帮助类HttpClients创建CloseableHttpClient对象.
         CloseableHttpClient client = HttpClients.createDefault();
         //HTTP请求类型创建HttpPost实例
@@ -68,7 +69,7 @@ public class HttpClientUtil {
                     if (null == resultBean.getData()) {
                         resultBean.setData(new Data());
                     }
-                    resultBean.getData().setXAuthToken((response.getFirstHeader("x-auth-token").toString()));
+                    resultBean.getData().setAuthToken((response.getFirstHeader("x-auth-token").toString()).split(" ")[1]);
                 }
                 return resultBean;
             }

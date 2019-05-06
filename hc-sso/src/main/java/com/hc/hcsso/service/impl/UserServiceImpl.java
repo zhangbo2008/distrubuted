@@ -12,6 +12,8 @@ import com.hc.hcsso.model.User;
 import com.hc.hcsso.service.UserService;
 import com.hc.hcsso.utils.HttpClientUtil;
 import com.hc.hcsso.utils.LocaleMessageSourceUtil;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -22,28 +24,38 @@ import static com.hc.hccommon.utils.VerifyUtil.checkNull;
 import static com.hc.hccommon.utils.VerifyUtil.isNotEmpty;
 
 @Service
+@Slf4j
 public class UserServiceImpl implements UserService {
 
     @Resource
     UserDao userDao;
 
     @Resource
+    private RedisTemplate<String, Object> redisTemplate;
+
+    @Resource
     private LocaleMessageSourceUtil localeMessageSourceUtil;
 
-    private Map<String, List<String>> tokenAndUrlMap = new HashMap<>();
+    private static Map<String, List<String>> tokenAndUrlMap = new HashMap<>();
 
-    private Map<String, User> tokenAndUserMap = new HashMap<>();
+    private static Map<String, User> tokenAndUserMap = new HashMap<>();
+
+    private static Map<String, String> tokenAndSessionId = new HashMap<>();
 
     @Override
     public Data login(RequestBean requestBean) {
         String token = requestBean.getToken();
         String clientUrl = requestBean.getClientUrl();
+        log.info("login() : token = {}, clientUrl = {}", token, clientUrl);
+
+        System.out.println("....." + isNotEmpty(token, clientUrl));
+        System.out.println("....." + tokenAndUrlMap.containsKey(token));
 
         // 用户已登陆
-        if (isNotEmpty(token, clientUrl) && checkNull(tokenAndUrlMap.get(token))) {
-            transmitToken(token, clientUrl);
-            // 默认成功登陆
-            return null;
+        if (isNotEmpty(token, clientUrl) && tokenAndUrlMap.containsKey(token)) {
+            log.info("token = {} 用户已登陆", token);
+            // 验证
+            return transmitToken(token, clientUrl);
         }
 
         // 使用账号密码进行登陆
@@ -76,7 +88,11 @@ public class UserServiceImpl implements UserService {
         tokenAndUrlMap.put(token, new ArrayList<>());
         tokenAndUserMap.put(token, user);
 
-        return transmitToken(token, clientUrl);
+        Data data = transmitToken(token, clientUrl);
+        tokenAndSessionId.put(token, data.getAuthToken());
+
+        log.info("loginImpl() 登录成功：token = {}, clientUrl = {}, sesssionId = {}, User = {}", token, clientUrl, tokenAndSessionId.get(token), user);
+        return data;
     }
 
     /**
@@ -87,13 +103,8 @@ public class UserServiceImpl implements UserService {
      */
     private Data transmitToken(String token, String clientUrl) {
         try {
-            ResultBean<Data> resultBean;
-            if ((resultBean =  (new HttpClientUtil().postAction(clientUrl + "/user/token", new RequestBean().setToken(token).setClientUrl(clientUrl)))).getCode() == 0) {
-                return resultBean.getData();
-            } else {
-                throw new ErrorException("valid error");
-            }
-        } catch (IOException | IllegalAccessException | InstantiationException e) {
+            return (new HttpClientUtil().postAction(clientUrl + "/user/token", new RequestBean().setToken(token).setClientUrl(clientUrl)).getData());
+        } catch (IOException e) {
             e.printStackTrace();
             throw new ErrorException("clientUrl error");
         }
@@ -124,16 +135,18 @@ public class UserServiceImpl implements UserService {
     @Override
     public Data logout(RequestBean requestBean) {
         String token = requestBean.getToken();
+        log.info("logout() : token = {}", token);
         if (tokenAndUrlMap.containsKey(token)) {
             List<String> urls = tokenAndUrlMap.get(token);
 
             // 注销所有子系统的登陆状态
             for (String clientUrl : urls) {
-                logoutSubSystem(clientUrl);
+                logoutSubSystem(token, clientUrl);
             }
             // 移除用户登陆状态
             tokenAndUrlMap.remove(token);
             tokenAndUserMap.remove(token);
+            tokenAndSessionId.remove(token);
             // 默认成功
             return null;
         }
@@ -150,9 +163,24 @@ public class UserServiceImpl implements UserService {
         throw new CheckException(UserStatusEnum.PARAMETER_ERROR.getMsg());
     }
 
+    @Override
+    public Data subLogout(RequestBean requestBean) {
+        String xAuthToken = requestBean.getAuthToken();
+        log.info("subLogout() : xAuthToken = {}", xAuthToken);
+        if (isNotEmpty(xAuthToken)) {
+            return subLogoutImpl(xAuthToken);
+        }
+        throw new CheckException(UserStatusEnum.PARAMETER_ERROR.getMsg());
+    }
+
+    private Data subLogoutImpl(String xAuthToken) {
+        redisTemplate.opsForList().getOperations().delete("spring:session:sessions:" + xAuthToken);
+        return new Data();
+    }
+
     private Data tokenImpl(String token, String clientUrl) {
         if (remoteValid(token, clientUrl)) {
-            return null;
+            return new Data();
         }
         throw new ErrorException("valid error");
     }
@@ -160,7 +188,7 @@ public class UserServiceImpl implements UserService {
     /**
      * 向SSO发送令牌与本地url，验证注册
      *
-     * @param token 令牌
+     * @param token     令牌
      * @param clientUrl 子系统url
      * @return true 验证成功
      */
@@ -170,16 +198,17 @@ public class UserServiceImpl implements UserService {
             if ((new HttpClientUtil().postAction("http://localhost:8889/user/valid", new RequestBean().setToken(token).setClientUrl(clientUrl))).getCode() == 0) {
                 return true;
             }
-        } catch (IOException | IllegalAccessException | InstantiationException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return false;
     }
 
-    private void logoutSubSystem(String clientUrl) {
+    private void logoutSubSystem(String token, String clientUrl) {
         try {
-            new HttpClientUtil().postAction(clientUrl + "/logout", new RequestBean());
-        } catch (IOException | IllegalAccessException | InstantiationException e) {
+            log.info("logoutSubSystem(): sessionId = {}", tokenAndSessionId.get(token));
+            new HttpClientUtil().postAction(clientUrl + "/user/sublogout", new RequestBean().setAuthToken(tokenAndSessionId.get(token)));
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

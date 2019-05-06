@@ -10,6 +10,6 @@ import org.springframework.session.web.http.HeaderHttpSessionIdResolver;
 public class HttpSessionConfig {
     @Bean
     public HeaderHttpSessionIdResolver httpSessionStrategy() {
-        return new HeaderHttpSessionIdResolver("x-auth-token");
+        return new HeaderHttpSessionIdResolver("xToken-auth-token");
     }
 }
