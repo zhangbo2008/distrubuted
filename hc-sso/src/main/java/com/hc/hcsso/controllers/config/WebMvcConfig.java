@@ -1,4 +1,4 @@
-package com.hc.hcsso.controller.config;
+package com.hc.hcsso.controllers.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -10,6 +10,7 @@ import org.springframework.web.servlet.mvc.WebContentInterceptor;
 public class WebMvcConfig implements WebMvcConfigurer {
     /**
      * 配置静态访问资源
+     *
      * @param registry
      */
     /*@Override
@@ -24,7 +25,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addViewController("/home").setViewName("home.html");
         registry.addViewController("/hello").setViewName("hello.html");
     }*/
-
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
 //        registry.addInterceptor(new LoginHandlerInterceptor()).addPathPatterns("/user/**");

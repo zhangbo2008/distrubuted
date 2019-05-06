@@ -28,7 +28,7 @@ hadoop:
   uri: hdfs://192.168.31.19:9000
 #Netty 配置
 netty:
-  tcp-port: 8090
+  tcp-port: 8091
   boss-count: 1
   worker-count: 10
   keep-alive: true

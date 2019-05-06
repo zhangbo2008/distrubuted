@@ -42,7 +42,7 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public byte[] downloadFile(HttpServletRequest request, FileInfo fileInfo, HttpServletResponse response) {
-        isEmpty(fileInfo);
+        isNotEmpty(fileInfo);
         try {
             return fastDFSUtil.download(fileInfo.getGroup(), fileInfo.getFilePath());
         } catch (IOException | MyException e) {
@@ -58,7 +58,7 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public void deleteFile(FileInfo fileInfo)  {
-        isEmpty(fileInfo);
+        isNotEmpty(fileInfo);
         try {
             fastDFSUtil.delete(fileInfo.getGroup(), fileInfo.getFilePath());
         } catch (IOException | MyException e) {
@@ -67,7 +67,7 @@ public class FileServiceImpl implements FileService {
         }
     }
 
-    private void isEmpty(FileInfo fileInfo) {
+    private void isNotEmpty(FileInfo fileInfo) {
         if (!FileVerifyUtil.checkNull(fileInfo) || !FileVerifyUtil.checkNull(fileInfo.getFilePath(), fileInfo.getGroup())) {
             throw new CheckException("文件信息不能为空");
         }

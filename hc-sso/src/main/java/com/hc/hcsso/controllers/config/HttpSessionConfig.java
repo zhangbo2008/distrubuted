@@ -1,4 +1,4 @@
-package com.hc.hcsso.controller.config;
+package com.hc.hcsso.controllers.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -17,6 +17,15 @@ spring:
       max-file-size: 100MB
       max-request-size: 100MB
 
+  session:
+    store-type: redis
+
+server:
+  port: 8889
+#  ssl:
+#    key-store: classpath:215069416590721.pfx
+#    key-store-type: PKCS12
+#    key-store-password: 215069416590721
 
 # MyBatis 配置
 mybatis:
@@ -28,7 +37,7 @@ hadoop:
   uri: hdfs://192.168.31.19:9000
 #Netty 配置
 netty:
-  tcp-port: 8090
+  tcp-port: 8092
   boss-count: 1
   worker-count: 10
   keep-alive: true
@@ -55,10 +64,4 @@ hdfs:
   uriPath: hdfs://192.168.31.19:9000
   hadoopHomeDir: E:\\JavaWeb\\hadoop_common_2.2.0
 
-server:
-  port: 8889
-#  ssl:
-#    key-store: classpath:215069416590721.pfx
-#    key-store-type: PKCS12
-#    key-store-password: 215069416590721
 

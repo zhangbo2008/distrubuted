@@ -11,24 +11,24 @@
     </sql>
 
     <insert id="insertUser" parameterType="com.hc.hcsso.model.User">
-        INSERT INTO S_user
+        INSERT INTO user
         (account, email, password)
         VALUES
         (
-          #{user.account},
-          #{user.email},
-          #{user.password}
+        #{user.account},
+        #{user.email},
+        #{user.password}
         )
     </insert>
     <select id="listUserByUserAccount" resultType="com.hc.hcsso.model.User">
         SELECT *
-        FROM S_user
+        FROM user
         WHERE account=#{account}
         LIMIT 1
     </select>
     <select id="listUserByUAccountAndPassword" resultType="com.hc.hcsso.model.User">
         SELECT *
-        FROM S_user
+        FROM user
         WHERE account=#{account}
         AND password=#{password}
         LIMIT 1

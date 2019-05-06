@@ -13,10 +13,13 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="client" target="1.8" />
       <module name="distributed" target="1.8" />
       <module name="hc-basic" target="1.8" />
       <module name="hc-common" target="1.8" />
       <module name="hc-sso" target="1.8" />
+      <module name="hc-sso-client" target="1.8" />
+      <module name="hc-sso-server" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

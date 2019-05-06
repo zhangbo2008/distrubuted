@@ -1,4 +1,4 @@
-package com.hc.hcsso.controller.interceptor;
+package com.hc.hcsso.controllers.interceptor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.server.ServerHttpRequest;
@@ -19,7 +19,7 @@ import java.util.Map;
 @Service
 @Slf4j
 public class WebSocketInterceptor implements HandshakeInterceptor {
-//    @Autowired
+    //    @Autowired
 //    private RedisTemplate<String, User> redisTemplate;
     @Override
     public boolean beforeHandshake(ServerHttpRequest serverHttpRequest, ServerHttpResponse serverHttpResponse,

@@ -1,4 +1,4 @@
-package com.hc.hcsso.controller.aop;
+package com.hc.hcsso.controllers.aop;
 
 import com.hc.hcsso.dtos.ResultBean;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +15,7 @@ import java.util.Arrays;
 @Slf4j
 public class ControllerAOP {
 
-    @Around("execution(public com.hc.hcsso.dtos.ResultBean com.hc.hcsso..controllers..*(..))")
+    @Around("execution(public com.hc.hcsso.dtos.ResultBean com.hc.hcsso.controllers..*(..))")
     public Object handlerControllerMethod(ProceedingJoinPoint pjp) {
         log.info("异常切面");
         long startTime = System.currentTimeMillis();
@@ -38,7 +38,7 @@ public class ControllerAOP {
 
         // 已知异常
         result.setMsg(e.getLocalizedMessage());
-        if (e instanceof NoPermissionException) {
+        if (e instanceof NoPermissionException ) {
             result.setCode(ResultBean.NO_PERMISSION);
         } else {
             log.error(pjp.getSignature() + " error ：" + e.getMessage());

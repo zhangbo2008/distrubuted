@@ -1,4 +1,4 @@
-package com.hc.hcsso.controller.aop;
+package com.hc.hcsso.controllers.aop;
 
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
@@ -22,7 +22,8 @@ public class WebLogAOP {
 //    public void webLog(){}
 
     @Pointcut("execution(public * com.qg.fantail.controllers..*(..))")
-    public void webLog(){}
+    public void webLog() {
+    }
 
     @Before("webLog()")
     public void doBefore(JoinPoint joinPoint) {

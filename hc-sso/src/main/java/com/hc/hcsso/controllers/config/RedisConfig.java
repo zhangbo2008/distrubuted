@@ -1,4 +1,4 @@
-package com.hc.hcsso.controller.config;
+package com.hc.hcsso.controllers.config;
 
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
@@ -66,6 +66,7 @@ public class RedisConfig extends CachingConfigurerSupport {
 
     /**
      * 设置spring session redis 序列化方式
+     *
      * @param factory
      * @return
      */
@@ -83,7 +84,6 @@ public class RedisConfig extends CachingConfigurerSupport {
         sessionRepository.setDefaultMaxInactiveInterval(36000);
         return sessionRepository;
     }*/
-
     @Override
     public KeyGenerator keyGenerator() {
         KeyGenerator keyGenerator = new KeyGenerator() {
@@ -93,7 +93,7 @@ public class RedisConfig extends CachingConfigurerSupport {
                 sb.append(o.getClass().getName());
                 sb.append(method.getName());
                 for (Object obj : objects) {
-                    sb.append(obj.toString()+"   :1024");
+                    sb.append(obj.toString() + "   :1024");
                 }
                 return sb.toString();
             }

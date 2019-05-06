@@ -2,6 +2,7 @@ package com.hc.hcbasic.dtos;
 
 
 import com.hc.hcbasic.model.User;
+import com.hc.hccommon.utils.VerifyUtil;
 
 @lombok.Data
 public class Data {

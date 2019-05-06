@@ -9,12 +9,14 @@ public enum UserStatusEnum {
 
     USER_ACCOUNT_ERROR("user_account_error"),
 
-    USER_HAS_REGISTER("user_has_register")
+    USER_HAS_REGISTER("user_has_register"),
+
+    USER_HAS_NOT_LOGIN("user has not login")
     ;
 
     private String msg;
 
-    public String UserStatusEnum() {
+    public String getMsg() {
         return msg;
     }
 }

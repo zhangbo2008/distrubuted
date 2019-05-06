@@ -17,7 +17,7 @@ import java.util.Arrays;
 @Slf4j
 public class ControllerAOP {
 
-    @Around("execution(public com.hc.hcbasic.dtos.ResultBean com.hc.distributed..controllers..*(..))")
+    @Around("execution(public com.hc.hcbasic.dtos.ResultBean com.hc.hcbasic.controllers..*(..))")
     public Object handlerControllerMethod(ProceedingJoinPoint pjp) {
         log.info("异常切面");
         long startTime = System.currentTimeMillis();
@@ -48,10 +48,9 @@ public class ControllerAOP {
             result.setCode(ResultBean.NO_PERMISSION);
         } else{
             log.error(pjp.getSignature() + " error ：" + e.getMessage());
-            e.printStackTrace();
             result.setCode(ResultBean.FAIL);
         }
-
+        e.printStackTrace();
         return result;
     }
 }
