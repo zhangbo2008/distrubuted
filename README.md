@@ -40,12 +40,12 @@ User sayHello(@SqlParam("userName") String userName);
 
 ### SSO单点登录
 可参考文章：
-关于SSO的基础学习：[单点登录（SSO），从原理到实现](https://cloud.tencent.com/developer/article/1166255)
-进阶：[单点登录(一)-----理论-----单点登录SSO的介绍和CAS+选型](https://blog.csdn.net/zzq900503/article/details/54646828)
+- 关于SSO的基础学习：[单点登录（SSO），从原理到实现](https://cloud.tencent.com/developer/article/1166255)
+- 进阶：[单点登录(一)-----理论-----单点登录SSO的介绍和CAS+选型](https://blog.csdn.net/zzq900503/article/details/54646828)
 
 实现了以下接口
-SSO认证中心登录：http://localhost:8889/user/login
-SSO认证中心注销：http://localhost:8889/user/logout
-SSO认证中心验证：http://localhost:8889/user/valid
-子系统注销：http://localhost:8889/user/logout
-子系统接收令牌：http://localhost:8889/user/token
+- SSO认证中心登录：http://localhost:8889/user/login
+- SSO认证中心注销：http://localhost:8889/user/logout
+- SSO认证中心验证：http://localhost:8889/user/valid
+- 子系统注销：http://localhost:8889/user/logout
+- 子系统接收令牌：http://localhost:8889/user/token
