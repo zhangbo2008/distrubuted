@@ -37,6 +37,7 @@ User sayHello(@SqlParam("userName") String userName);
 防SQL注入处理：可以区分井号符#与美元符$的区别，对于使用井号符#修饰的参数进行防SQL注入处理
 #### 未实现功能
 没有实现类似`List<User>`的返回值
+不支持引用类型的传参
 
 ### SSO单点登录
 可参考文章：
