@@ -14,7 +14,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 /**
- * ${space}
+ * 用户控制层
  *
  * @author HC
  * @create 2019-05-03 14:18
@@ -29,11 +29,21 @@ public class UserController {
 
     // sso服务端
 
+    /**
+     * 用户登陆
+     * @param requestBean user、clientUrl、token
+     * @return token、clientUrl、authToken
+     */
     @PostMapping("/login")
     public ResultBean<Data> login(@RequestBody RequestBean requestBean) {
         return new ResultBean<>(userService.login(requestBean));
     }
 
+    /**
+     * 验证客户端的token与clientUrl是否合法,若合法则将客户端的clientUrl注册到token中
+     * @param requestBean token、clientUrl
+     * @return 操作结果，成功data为null
+     */
     @PostMapping("/valid")
     public ResultBean<Data> validToken(@RequestBody RequestBean requestBean) {
         return new ResultBean<>(userService.valid(requestBean));
@@ -44,23 +54,26 @@ public class UserController {
         return new ResultBean<>(userService.register(requestBean));
     }
 
+    /**
+     * 注销用户在所有子系统的登陆状态
+     * @param requestBean token
+     * @return 操作结果
+     */
     @PostMapping("/logout")
     public ResultBean<Data> logout(@RequestBody RequestBean requestBean) {
         return new ResultBean<>(userService.logout(requestBean));
     }
 
+    /**
+     * 注销局部会话，若请求方不为SSO认证中心，则请求认证中心注销所有子系统的登陆状态
+     * @param requestBean token
+     * @param request 请求
+     * @return 操作结果
+     */
     @PostMapping("sublogout")
     public ResultBean<Data> subLogout(@RequestBody RequestBean requestBean, HttpServletRequest request) {
-        /*try {
-            RequestBean requestBean1 = new Gson().fromJson(request.getReader(), RequestBean.class);
-            System.out.println("ssssssss" + requestBean1.getAuthToken());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
-
         if (!request.getRemoteAddr().startsWith("127.0.0.1")) {
             try {
-                System.out.println("come in sssssssssssssssss");
                 return new HttpClientUtil().postAction("http://localhost:8889/user/logout", new RequestBean());
             } catch (IOException e) {
                 e.printStackTrace();
@@ -71,6 +84,12 @@ public class UserController {
         return new ResultBean<>();
     }
 
+    /**
+     * 接收来自服务器的token与clientUrl,
+     * @param httpSession 操作session
+     * @param requestBean token、clientUrl
+     * @return 操作结果，成功data为带token与clientUrl
+     */
     // sso客户端
     @PostMapping("/token")
     public ResultBean<Data> token(HttpSession httpSession, @RequestBody RequestBean requestBean) {

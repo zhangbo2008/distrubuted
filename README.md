@@ -50,3 +50,7 @@ User sayHello(@SqlParam("userName") String userName);
 - SSO认证中心验证：http://localhost:8889/user/valid
 - 子系统注销：http://localhost:8889/user/logout
 - 子系统接收令牌：http://localhost:8889/user/token
+
+实现教程:
+- [基于Springboot、Java的SSO单点登陆系统的登陆操作实战](https://blog.csdn.net/weixin_41973131/article/details/89956210)
+- [基于Springboot、Java的SSO单点登陆系统的注销操作实战](https://blog.csdn.net/weixin_41973131/article/details/89960871)

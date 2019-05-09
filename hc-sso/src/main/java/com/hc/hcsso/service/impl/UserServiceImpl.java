@@ -27,38 +27,65 @@ import static com.hc.hccommon.utils.VerifyUtil.isNotEmpty;
 @Slf4j
 public class UserServiceImpl implements UserService {
 
+    /**
+     * 用户的Mysql数据库操作
+     */
     @Resource
     UserDao userDao;
 
+    /**
+     * 服务器之间的通讯方式
+     */
+    @Resource
+    HttpClientUtil httpClientUtil;
+
+    /**
+     * redis数据库操作
+     */
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
 
     @Resource
     private LocaleMessageSourceUtil localeMessageSourceUtil;
 
+    /**
+     * 建立token与clientUrl的映射
+     */
     private static Map<String, List<String>> tokenAndUrlMap = new HashMap<>();
 
+    /**
+     * 建立token与user信息的映射
+     */
     private static Map<String, User> tokenAndUserMap = new HashMap<>();
 
+    /**
+     * 建立token与sessionID，即x-auth-token之间的映射
+     */
     private static Map<String, String> tokenAndSessionId = new HashMap<>();
 
+    /**
+     * 验证用户是否已登录、验证请求参数是否合法
+     * @param requestBean user、clientUrl、token
+     * @return token、clientUrl、authToken
+     */
     @Override
     public Data login(RequestBean requestBean) {
         String token = requestBean.getToken();
         String clientUrl = requestBean.getClientUrl();
         log.info("login() : token = {}, clientUrl = {}", token, clientUrl);
 
-        System.out.println("....." + isNotEmpty(token, clientUrl));
-        System.out.println("....." + tokenAndUrlMap.containsKey(token));
-
-        // 用户已登陆
+        // 用户使用token、clientUrl代表需要查询是否已登录
+        // tokenAndUrlMap中包含key代表已登录
         if (isNotEmpty(token, clientUrl) && tokenAndUrlMap.containsKey(token)) {
             log.info("token = {} 用户已登陆", token);
-            // 验证
-            return transmitToken(token, clientUrl);
+            // 将信息反馈给Client
+            Data data = transmitToken(token, clientUrl);
+            tokenAndSessionId.put(token, data.getAuthToken());
+            return data;
         }
 
         // 使用账号密码进行登陆
+
         User user = requestBean.getUser();
 
         // 登陆信息为空，说明用户意图不为登陆，抛出未登录状态的异常
@@ -71,28 +98,50 @@ public class UserServiceImpl implements UserService {
             return loginImpl(user, clientUrl);
         }
 
+        // 说明参数检验不通过，抛出参数错误异常
         throw new CheckException(UserStatusEnum.PARAMETER_ERROR.getMsg());
     }
 
+    /**
+     * 用户登录逻辑实现
+     * @param user 用户信息:account、password
+     * @param clientUrl Client的url
+     * @return token、clientUrl、authToken
+     */
     private Data loginImpl(User user, String clientUrl) {
         String account = user.getAccount();
         String password = user.getPassword();
-        user = userDao.listUserByUAccountAndPassword(account, password);
 
+        // 查询数据库，若无此用户数据则抛出账号错误异常
+        user = userDao.listUserByUAccountAndPassword(account, password);
         if (!checkNull(user)) {
             throw new CheckException(UserStatusEnum.USER_ACCOUNT_ERROR.getMsg());
         }
 
-        // 生成token并存入tokenMap中，但此时并没有注册系统
+        // 使用uuid生成token并存入tokenMap中，注意此时并没有注册clientUrl
         String token = UUID.randomUUID().toString();
         tokenAndUrlMap.put(token, new ArrayList<>());
         tokenAndUserMap.put(token, user);
 
+        // 将信息反馈给Client、
         Data data = transmitToken(token, clientUrl);
         tokenAndSessionId.put(token, data.getAuthToken());
 
         log.info("loginImpl() 登录成功：token = {}, clientUrl = {}, sesssionId = {}, User = {}", token, clientUrl, tokenAndSessionId.get(token), user);
         return data;
+    }
+
+    private void saveUrl(String token, String clientUrl) {
+        boolean hasSave = false;
+        List<String> clientUrlList = tokenAndUrlMap.get(token);
+        for (String url : clientUrlList) {
+            if (url.contains(clientUrl)) {
+                hasSave = true;
+            }
+        }
+        if (!hasSave) {
+            clientUrlList.add(clientUrl);
+        }
     }
 
     /**
@@ -103,7 +152,7 @@ public class UserServiceImpl implements UserService {
      */
     private Data transmitToken(String token, String clientUrl) {
         try {
-            return (new HttpClientUtil().postAction(clientUrl + "/user/token", new RequestBean().setToken(token).setClientUrl(clientUrl)).getData());
+            return (httpClientUtil.postAction(clientUrl + "/user/token", new RequestBean().setToken(token).setClientUrl(clientUrl)).getData());
         } catch (IOException e) {
             e.printStackTrace();
             throw new ErrorException("clientUrl error");
@@ -121,6 +170,11 @@ public class UserServiceImpl implements UserService {
         throw new CheckException(UserStatusEnum.PARAMETER_ERROR.getMsg());
     }
 
+    /**
+     * 检验基本的token、clientUrl参数的合法性
+     * @param requestBean token、clientUrl
+     * @return 操作结果，成功data为null
+     */
     @Override
     public Data valid(RequestBean requestBean) {
         String token = requestBean.getToken();
@@ -132,6 +186,11 @@ public class UserServiceImpl implements UserService {
         throw new CheckException(localeMessageSourceUtil.getMessage(UserStatusEnum.PARAMETER_ERROR.getMsg()));
     }
 
+    /**
+     * 验证token是否存在，若存在则请求注销所有子系统的局部变量并且销毁token
+     * @param requestBean token 令牌凭证
+     * @return 操作结果
+     */
     @Override
     public Data logout(RequestBean requestBean) {
         String token = requestBean.getToken();
@@ -153,6 +212,11 @@ public class UserServiceImpl implements UserService {
         throw new CheckException("令牌错误");
     }
 
+    /**
+     * 验证来自服务器的token与clientUrl参数合法性,
+     * @param requestBean token、clientUrl
+     * @return 操作结果，成功data为带token与clientUrl
+     */
     @Override
     public Data token(RequestBean requestBean) {
         String token = requestBean.getToken();
@@ -163,6 +227,11 @@ public class UserServiceImpl implements UserService {
         throw new CheckException(UserStatusEnum.PARAMETER_ERROR.getMsg());
     }
 
+    /**
+     * 验证来自服务器的token与clientUrl,
+     * @param requestBean token、clientUrl
+     * @return 操作结果，成功data为带token与clientUrl
+     */
     @Override
     public Data subLogout(RequestBean requestBean) {
         String xAuthToken = requestBean.getAuthToken();
@@ -173,6 +242,11 @@ public class UserServiceImpl implements UserService {
         throw new CheckException(UserStatusEnum.PARAMETER_ERROR.getMsg());
     }
 
+    /**
+     * 通过redis直接删除局部变量在redis数据库中的user属性
+     * @param xAuthToken x-auth-token 相当于SESSIONID
+     * @return 操作成功
+     */
     private Data subLogoutImpl(String xAuthToken) {
         redisTemplate.opsForList().getOperations().delete("spring:session:sessions:" + xAuthToken);
         return new Data();
@@ -195,7 +269,7 @@ public class UserServiceImpl implements UserService {
     private boolean remoteValid(String token, String clientUrl) {
         try {
             // 0为验证成功
-            if ((new HttpClientUtil().postAction("http://localhost:8889/user/valid", new RequestBean().setToken(token).setClientUrl(clientUrl))).getCode() == 0) {
+            if ((httpClientUtil.postAction("http://localhost:8889/user/valid", new RequestBean().setToken(token).setClientUrl(clientUrl))).getCode() == 0) {
                 return true;
             }
         } catch (IOException e) {
@@ -207,12 +281,18 @@ public class UserServiceImpl implements UserService {
     private void logoutSubSystem(String token, String clientUrl) {
         try {
             log.info("logoutSubSystem(): sessionId = {}", tokenAndSessionId.get(token));
-            new HttpClientUtil().postAction(clientUrl + "/user/sublogout", new RequestBean().setAuthToken(tokenAndSessionId.get(token)));
+            httpClientUtil.postAction(clientUrl + "/user/sublogout", new RequestBean().setAuthToken(tokenAndSessionId.get(token)));
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * 验证客户端的token与clientUrl是否合法,若合法则将客户端的clientUrl注册到token中
+     * @param token  令牌，用户SSO认证中心登录的凭证
+     * @param clientUrl 子系统的url
+     * @return 操作结果，成功data为null
+     */
     private Data validImpl(String token, String clientUrl) {
         boolean hasSave = false;
 

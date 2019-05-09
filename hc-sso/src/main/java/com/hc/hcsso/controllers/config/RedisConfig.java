@@ -101,5 +101,4 @@ public class RedisConfig extends CachingConfigurerSupport {
         //default : Arrays.deepHashCode(objects)
         return keyGenerator;
     }
-
 }

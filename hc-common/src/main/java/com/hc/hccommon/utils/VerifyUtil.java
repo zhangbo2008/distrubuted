@@ -15,6 +15,11 @@ public class VerifyUtil implements Serializable {
         return (null != str && !str.equals(""));
     }
 
+    /**
+     * 字符串判空
+     * @param args 多个字符串
+     * @return 全部不为空返回true
+     */
     public static boolean isNotEmpty(String... args) {
         for (String str : args) {
             if (null == str || str.equals("")) {
@@ -24,6 +29,11 @@ public class VerifyUtil implements Serializable {
         return true;
     }
 
+    /**
+     * 检查字符串是否为null
+     * @param arg 多个字符串
+     * @return 全部不为null返回true
+     */
     public static boolean checkNull(String...arg) {
         for (String str : arg) {
             if (!checkNull(str)) {
