@@ -29,12 +29,12 @@ public class SqlMapper {
         }
     }
 
-    public static void initSql() throws IllegalAccessException {
+    static void initSql() throws IllegalAccessException {
         initMapperDao();
         initAutoDao();
     }
 
-    public static void initMapperDao() {
+    private static void initMapperDao() {
         for (Class<?> clazz : classes) {
             Annotation[] annotations = clazz.getAnnotations();
             for (Annotation annotation : annotations) {
@@ -46,7 +46,7 @@ public class SqlMapper {
         }
     }
 
-    public static void initAutoDao() throws IllegalAccessException {
+    private static void initAutoDao() throws IllegalAccessException {
         for (Class<?> clazz : classes) {
             Field[] fields = clazz.getDeclaredFields();
             for (Field field : fields) {

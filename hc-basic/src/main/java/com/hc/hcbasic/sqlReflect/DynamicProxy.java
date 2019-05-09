@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class DynamicProxy implements InvocationHandler {
@@ -45,7 +46,7 @@ public class DynamicProxy implements InvocationHandler {
         try {
             switch (getType(sql)) {
                 case "SELECT":
-                    o = selectMethod(returnType, ps);
+                    o = selectMethod(method, returnType, ps);
                     break;
                 case "UPDATE":
                     o = updateMethod(returnType, ps);
@@ -56,7 +57,8 @@ public class DynamicProxy implements InvocationHandler {
                 case "DELETE":
                     o = deleteMethod(returnType, ps);
                     break;
-                    default:throw new ErrorException("Sql is error");
+                default:
+                    throw new ErrorException("Sql is error");
             }
         } finally {
             connectionPool.returnConnection(con);
@@ -86,6 +88,11 @@ public class DynamicProxy implements InvocationHandler {
             return defaultValue;
         }
 
+        if (returnType.isInterface()) {
+            o = SqlMapper.getInstance();
+            return o;
+        }
+
         try {
             // 拥有默认构造器的对象
             o = returnType.newInstance();
@@ -102,30 +109,77 @@ public class DynamicProxy implements InvocationHandler {
         return sql.split(" ")[0].toUpperCase();
     }
 
-    public Object selectMethod(Class<?> returnType, PreparedStatement ps) throws SQLException, NoSuchFieldException, NoSuchMethodException, InvocationTargetException, IllegalAccessException, InstantiationException {
-        Object o = getObject(returnType, 0);
-        ResultSet rs = null;
-        try {
-            rs = ps.executeQuery();
-            int count = rs.getMetaData().getColumnCount();
-            if (rs.next()) {
-                for (int i = 1; i <= count; i++) {
-                    String colunmLabel = rs.getMetaData().getColumnLabel(i);
+    public Object selectMethod(Method method, Class<?> returnType, PreparedStatement ps) throws SQLException, NoSuchFieldException, NoSuchMethodException, InvocationTargetException, IllegalAccessException, InstantiationException {
 
-                    String humpName = SqlUtil.underLineToHump(colunmLabel);
-                    String methodName = SqlUtil.getMethodName(humpName);
+        boolean isList = false;
 
-                    Object result = rs.getObject(i);
-                    Class<?> fieldClass = SqlUtil.getFieldClass(o, humpName);
+        Object list = null;
+        if (returnType == List.class) {
+            isList = true;
+            list = getObject(ArrayList.class, 0);
+//            list = new ArrayList();
+            returnType = GenericsUtils.getMethodGenericReturnType(method);
+        }
 
-                    Method setMethod = o.getClass().getDeclaredMethod(methodName, fieldClass);
-                    setMethod.invoke(o, result);
-                }
+        // 执行sql语句
+        ResultSet rs;
+        rs = ps.executeQuery();
+        // 得到数据行数
+        int count = rs.getMetaData().getColumnCount();
+
+        Object o = null;
+        while (rs.next()) {
+            // 实例化对象o
+            o = getObject(returnType, 0);
+            // 数据库表中的列从1开始计数
+            for (int i = 1; i <= count; i++) {
+                // 得到数据表当前列的名称
+                String colunmLabel = rs.getMetaData().getColumnLabel(i);
+
+                // 将数据库下划线风格的名称转化为驼峰
+                String humpName = SqlUtil.underLineToHump(colunmLabel);
+                // 根据驼峰命名得到相应的set方法
+                String methodName = SqlUtil.getMethodName(humpName);
+
+                // 得到数据表中当前行的值
+                Object result = rs.getObject(i);
+                // 得到o中名为humpName的字段的class类型
+                Class<?> fieldClass = SqlUtil.getFieldClass(o, humpName);
+
+                // 得到字段相应的set方法并将结果放入。
+                Method setMethod = o.getClass().getDeclaredMethod(methodName, fieldClass);
+                setMethod.invoke(o, result);
             }
-        } finally {
-            JdbcUtils.close(rs);
+            if (isList) {
+                Method addMethod = list.getClass().getDeclaredMethod("add", Object.class);
+                addMethod.invoke(list, o);
+            }
+        }
+
+        if (isList) {
+            return list;
         }
         return o;
+    }
+
+    /**
+     * 获取泛型类Class对象，不是泛型类则返回null
+     * 只能拿到类的泛型而不能拿到实例的泛型
+     *
+     * @param clazz 类对象
+     * @return 类对象的泛型
+     */
+    public static Class<?> getActualTypeArgument(Class<?> clazz) {
+        Class<?> entitiClass = null;
+        Type genericSuperclass = clazz.getGenericSuperclass();
+        if (genericSuperclass instanceof ParameterizedType) {
+            Type[] actualTypeArguments = ((ParameterizedType) genericSuperclass).getActualTypeArguments();
+            if (actualTypeArguments != null && actualTypeArguments.length > 0) {
+                System.out.println(actualTypeArguments[0]);
+                entitiClass = (Class<?>) actualTypeArguments[0];
+            }
+        }
+        return entitiClass;
     }
 
     public Object updateMethod(Class<?> returnType, PreparedStatement ps) throws SQLException, InvocationTargetException, NoSuchMethodException, NoSuchFieldException, InstantiationException, IllegalAccessException {
@@ -141,6 +195,10 @@ public class DynamicProxy implements InvocationHandler {
     }
 
     public static void main(String[] args) throws IllegalAccessException, InstantiationException {
-        List.class.newInstance();
+
+        System.out.println(List.class.newInstance());
+
+
+//        System.out.println(((ParameterizedType) strings.getClass().getGenericInterfaces()[0]).getActualTypeArguments()[0]);
     }
 }

@@ -72,6 +72,13 @@ public class SqlUtil {
         return "set" + message.replaceFirst("\\b\\w", String.valueOf(message.charAt(0)).toUpperCase());
     }
 
+    /**
+     * 得到对象o中字段名为message的字段的class
+     * @param o 对象
+     * @param message 字段名
+     * @return 对象o中符合字段名message的字段的Class
+     * @throws NoSuchFieldException 找不到指定字段
+     */
     static Class<?> getFieldClass(Object o, String message) throws NoSuchFieldException {
         Field field = o.getClass().getDeclaredField(message);
         String typeName = field.getType().getTypeName();

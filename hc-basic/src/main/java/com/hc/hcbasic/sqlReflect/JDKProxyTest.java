@@ -9,6 +9,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Proxy;
+import java.util.List;
 import java.util.Set;
 
 public class JDKProxyTest extends AbstractProcessor {
@@ -61,7 +62,7 @@ public class JDKProxyTest extends AbstractProcessor {
 
     public static void noImpl() throws IllegalAccessException {
         SqlMapper.initSql();
-        User user = helloWordDao.sayHello("3");
+        List<User> user = helloWordDao.sayHello("3");
         System.out.println(user);
     }
 

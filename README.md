@@ -30,15 +30,16 @@ public interface HelloWordDao {}
 @SqlAnnotation("SELECT * FROM user WHERE user_name = #{userName}")
 User sayHello(@SqlParam("userName") String userName);
 ```
-其返回值支持引用类型（不包括List）与基本类型。
+其返回值支持引用类型、基本类型与List。
 
-此处的`@SqlParam`其实只起到了标记的作用，注入userName只是根据形参名进行注入的。本来是打算用`@SqlParam`实现，不过写到后面发现写错了，虽然要改也不难，但就先这样，有兴趣的朋友可以自己修改。
+使用`@SqlParam`确定参数类型
 
 防SQL注入处理：可以区分井号符#与美元符$的区别，对于使用井号符#修饰的参数进行防SQL注入处理
 
 加入连接池减少建立连接产生的性能消耗
+
+使用.yml文件配置数据库
 #### 未实现功能
-没有实现类似`List<User>`的返回值
 不支持引用类型的传参
 
 ### SSO单点登录
