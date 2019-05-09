@@ -1,8 +1,11 @@
 package com.hc.hcbasic.sqlReflect;
 
 import com.hc.hcbasic.exceptions.ErrorException;
+import org.apache.hadoop.fs.Path;
+import org.yaml.snakeyaml.Yaml;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.lang.annotation.Annotation;
@@ -31,7 +34,7 @@ public class SqlMapper {
         initAutoDao();
     }
 
-    public static void  initMapperDao() {
+    public static void initMapperDao() {
         for (Class<?> clazz : classes) {
             Annotation[] annotations = clazz.getAnnotations();
             for (Annotation annotation : annotations) {
@@ -56,7 +59,7 @@ public class SqlMapper {
         }
     }
 
-    public static Object getInstance(){
+    public static Object getInstance() {
         DynamicProxy invocationHandler = new DynamicProxy();
         return Proxy.newProxyInstance(
                 SqlMapper.class.getClassLoader(),
@@ -90,7 +93,7 @@ public class SqlMapper {
     }
 
     public static void findAndClassesInPackageByFile(String packageName,
-                                              String packagePath, final boolean recursive, Set<Class<?>> classes) throws ClassNotFoundException {
+                                                     String packagePath, final boolean recursive, Set<Class<?>> classes) throws ClassNotFoundException {
         // 获取此包的目录， 建立一个File
         File dir = new File(packagePath);
         if (!dir.exists() || !dir.isDirectory()) {
