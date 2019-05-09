@@ -1,4 +1,4 @@
-package com.hc.hcbasic;
+package com.hc.hcbasic.sqlConnectionPool;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -64,7 +64,7 @@ public class ConnectionPool {
         log.info("连接池注册JDBC驱动程序成功");
 
         // 创建保存连接的向量 , 初始时有 0 个元素
-        connections = new Vector();
+        connections = new Vector<>();
 
         // 根据 initialConnections 中设置的值，创建连接。
         createConnections(this.initialConnections);
@@ -137,6 +137,7 @@ public class ConnectionPool {
             return null; // 连接池还没创建，则返回 null
         }
         Connection conn = getFreeConnection(); // 获得一个可用的数据库连接
+
         // 如果目前没有可以使用的连接，即所有的连接都在使用中
         while (conn == null) {
             // 等一会再试
@@ -178,9 +179,9 @@ public class ConnectionPool {
      * @return 返回一个可用的数据库连接
      */
 
-    private Connection findFreeConnection() throws SQLException {
+    private Connection findFreeConnection() {
         Connection conn = null;
-        PooledConnection pConn = null;
+        PooledConnection pConn;
         // 获得连接池向量中所有的对象
         Enumeration enumerate = connections.elements();
         // 遍历所有的对象，看是否有可用的连接
@@ -240,7 +241,7 @@ public class ConnectionPool {
     /**
      * 此函数返回一个数据库连接到连接池中，并把此连接置为空闲。 所有使用连接池获得的数据库连接均应在不使用此连接时返回它。
      *
-     * @param 需返回到连接池中的连接对象
+     * @param conn 需返回到连接池中的连接对象
      */
 
     public void returnConnection(Connection conn) {
@@ -249,7 +250,7 @@ public class ConnectionPool {
             System.out.println(" 连接池不存在，无法返回此连接到连接池中 !");
             return;
         }
-        PooledConnection pConn = null;
+        PooledConnection pConn;
         Enumeration enumerate = connections.elements();
         // 遍历连接池中的所有连接，找到这个要返回的连接对象
         while (enumerate.hasMoreElements()) {
@@ -266,14 +267,13 @@ public class ConnectionPool {
     /**
      * 刷新连接池中所有的连接对象
      */
-
     public synchronized void refreshConnections() throws SQLException {
         // 确保连接池己创新存在
         if (connections == null) {
-            System.out.println(" 连接池不存在，无法刷新 !");
+            log.info("连接池不存在，无法刷新!");
             return;
         }
-        PooledConnection pConn = null;
+        PooledConnection pConn;
         Enumeration enumerate = connections.elements();
         while (enumerate.hasMoreElements()) {
             // 获得一个连接对象
@@ -292,14 +292,13 @@ public class ConnectionPool {
     /**
      * 关闭连接池中所有的连接，并清空连接池。
      */
-
     public synchronized void closeConnectionPool() throws SQLException {
         // 确保连接池存在，如果不存在，返回
         if (connections == null) {
             System.out.println(" 连接池不存在，无法关闭 !");
             return;
         }
-        PooledConnection pConn = null;
+        PooledConnection pConn;
         Enumeration enumerate = connections.elements();
         while (enumerate.hasMoreElements()) {
             pConn = (PooledConnection) enumerate.nextElement();
@@ -319,7 +318,7 @@ public class ConnectionPool {
     /**
      * 关闭一个数据库连接
      *
-     * @param 需要关闭的数据库连接
+     * @param conn 需要关闭的数据库连接
      */
 
     private void closeConnection(Connection conn) {
@@ -333,13 +332,14 @@ public class ConnectionPool {
     /**
      * 使程序等待给定的毫秒数
      *
-     * @param 给定的毫秒数
+     * @param mSeconds 给定的毫秒数
      */
 
     private void wait(int mSeconds) {
         try {
             Thread.sleep(mSeconds);
         } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 
@@ -348,31 +348,31 @@ public class ConnectionPool {
      */
 
     class PooledConnection {
-        Connection connection = null;// 数据库连接
+        Connection connection;// 数据库连接
         boolean busy = false; // 此连接是否正在使用的标志，默认没有正在使用
 
         // 构造函数，根据一个 Connection 构告一个 PooledConnection 对象
-        public PooledConnection(Connection connection) {
+        PooledConnection(Connection connection) {
             this.connection = connection;
         }
 
         // 返回此对象中的连接
-        public Connection getConnection() {
+        Connection getConnection() {
             return connection;
         }
 
         // 设置此对象的，连接
-        public void setConnection(Connection connection) {
+        void setConnection(Connection connection) {
             this.connection = connection;
         }
 
         // 获得对象连接是否忙
-        public boolean isBusy() {
+        boolean isBusy() {
             return busy;
         }
 
         // 设置对象的连接正在忙
-        public void setBusy(boolean busy) {
+        void setBusy(boolean busy) {
             this.busy = busy;
         }
     }

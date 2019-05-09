@@ -82,6 +82,15 @@ public class SqlUtil {
         }
     }
 
+    /**
+     * 针对SQL语句进行处理
+     * @param sql sql语句
+     * @param parameters 注解
+     * @param args 参数值
+     * @param con 数据库连接
+     * @return 封装后的PreparedStatement
+     * @throws SQLException
+     */
     static PreparedStatement sqlHandel(String sql, Parameter[] parameters, Object[] args, Connection con) throws SQLException {
         Object[] injectArgs = new Object[args.length + 1];
         int indexOfInjectArgs = 1;

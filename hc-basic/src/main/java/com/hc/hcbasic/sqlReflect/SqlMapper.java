@@ -20,7 +20,7 @@ public class SqlMapper {
 
     static {
         try {
-            classes = getClasses("com.hc.distributed");
+            classes = getClasses("com.hc.hcbasic");
         } catch (UnsupportedEncodingException | ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -49,6 +49,7 @@ public class SqlMapper {
             for (Field field : fields) {
                 AutoDao annotation = field.getAnnotation(AutoDao.class);
                 if (null != annotation) {
+                    field.setAccessible(true);
                     field.set(null, getInstance());
                 }
             }

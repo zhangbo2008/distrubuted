@@ -1,6 +1,8 @@
 package com.hc.hcbasic.sqlReflect;
 
 import com.hc.hcbasic.exceptions.ErrorException;
+import com.hc.hcbasic.sqlConnectionPool.ConnectionPool;
+import com.hc.hcbasic.sqlConnectionPool.ConnectionPoolUtils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
@@ -11,6 +13,9 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class DynamicProxy implements InvocationHandler {
+
+    private ConnectionPool connectionPool = ConnectionPoolUtils.getPoolInstance();
+
     DynamicProxy() {
 
     }
@@ -31,7 +36,7 @@ public class DynamicProxy implements InvocationHandler {
         Parameter[] parameters = method.getParameters();
         Class<?> returnType = method.getReturnType();
 
-        Connection con = JdbcUtils.getCon();
+        Connection con = connectionPool.getConnection();
         PreparedStatement ps = SqlUtil.sqlHandel(sql, parameters, args, con);
 
         //TODO void类型会出事
@@ -54,7 +59,7 @@ public class DynamicProxy implements InvocationHandler {
                     default:throw new ErrorException("Sql is error");
             }
         } finally {
-            JdbcUtils.close(con, ps);
+            connectionPool.returnConnection(con);
         }
 
         return o;
