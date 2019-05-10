@@ -13,10 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 public class JDKProxyTest extends AbstractProcessor {
-    public static void main(String[] args) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException, UnsupportedEncodingException, ClassNotFoundException {
-//        proxyAnnotation1();
-        noImpl();
-    }
+
 
     public static void proxy1() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         Class<?> proxyClass = Proxy.getProxyClass(JDKProxyTest.class.getClassLoader(), HelloWordDao.class);
@@ -55,6 +52,10 @@ public class JDKProxyTest extends AbstractProcessor {
 //        DynamicProxy inter = new DynamicProxy(new HelloWordImpl());
 //        HelloWordDao helloWord = (HelloWordDao) Proxy.newProxyInstance(HelloWordDao.class.getClassLoader(), new Class[] {HelloWordDao.class, FileService.class}, inter);
 //        helloWord.sayHello(4);
+    }
+
+    public static void main(String[] args) throws IllegalAccessException {
+        noImpl();
     }
 
     @AutoDao

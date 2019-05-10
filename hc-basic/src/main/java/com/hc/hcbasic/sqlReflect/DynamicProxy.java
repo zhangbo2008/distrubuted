@@ -26,6 +26,7 @@ public class DynamicProxy implements InvocationHandler {
         Annotation[] annotations = method.getAnnotations();
         String sql = "";
 
+        // 遍历方法上的注解并取得sql语句
         for (Annotation annotation :
                 annotations) {
             if (annotation instanceof SqlAnnotation) {
@@ -34,15 +35,20 @@ public class DynamicProxy implements InvocationHandler {
         }
 
         //TODO 该方法Java原生不做任何设置只能获取arg0这类名字
+        // 得到参数类型
         Parameter[] parameters = method.getParameters();
+        // 得到返回值类型
         Class<?> returnType = method.getReturnType();
 
+        // 使用连接池获得连接
         Connection con = connectionPool.getConnection();
+        // 处理并执行sql语句
         PreparedStatement ps = SqlUtil.sqlHandel(sql, parameters, args, con);
 
         //TODO void类型会出事
         Object o;
 
+        // 分类操作
         try {
             switch (getType(sql)) {
                 case "SELECT":
@@ -61,9 +67,12 @@ public class DynamicProxy implements InvocationHandler {
                     throw new ErrorException("Sql is error");
             }
         } finally {
+            // 将连接置回连接池
             connectionPool.returnConnection(con);
         }
 
+        // 返回操作结果
+        // 注意此时并没有调用invoke方法，因此可以无需实现类
         return o;
     }
 

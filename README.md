@@ -15,7 +15,8 @@ distrubuted
 ### 使用动态代理封装数据库操作
 代码放置在`hc-basic`模块中的`src/main/java/com/hc/hcbasic/sqlReflect`包中。
 
-#### 实现的功能
+实现的功能
+
 可使用`@AutoDao`实现实例的注入，注入的类需要是经过`@DaoMapper`注释的：
 ```java
 @AutoDao
@@ -39,8 +40,13 @@ User sayHello(@SqlParam("userName") String userName);
 加入连接池减少建立连接产生的性能消耗
 
 使用.yml文件配置数据库
-#### 未实现功能
+
+未实现功能
+
 不支持引用类型的传参
+
+实现教程:
+- [利用反射、静态代理、动态代理封装数据库操作（一）：整体框架介绍](https://blog.csdn.net/weixin_41973131/article/details/90050623)
 
 ### SSO单点登录
 可参考文章：
