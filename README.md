@@ -13,7 +13,7 @@ distrubuted
 代码风格使用的是晓风轻的代码规范：[我的编码习惯 - Controller规范](https://zhuanlan.zhihu.com/p/28717374)
 
 ### 使用动态代理封装数据库操作
-代码放置在`hc-basic`模块中的`src/main/java/com/hc/hcbasic/sqlReflect`包中。
+代码放置在`hc-sql`模块中
 
 实现的功能
 

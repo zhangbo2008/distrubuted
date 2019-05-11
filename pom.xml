@@ -21,6 +21,7 @@
         <module>hc-sso</module>
         <module>hc-basic</module>
         <module>hc-common</module>
+        <module>hc-sql</module>
     </modules>
 
     <properties>
@@ -167,6 +168,15 @@
             <artifactId>guava</artifactId>
             <version>21.0</version>
         </dependency>-->
+
+        <!--bcrypt加密-->
+        <!-- https://mvnrepository.com/artifact/org.mindrot/jbcrypt -->
+        <dependency>
+            <groupId>org.mindrot</groupId>
+            <artifactId>jbcrypt</artifactId>
+            <version>0.3m</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -176,6 +186,45 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
         </plugins>
+        <resources>
+            <resource>
+                <directory>hc-sso/src/main/resourcesd</directory>
+            </resource>
+            <resource>
+                <directory>hc-basic/src/main/resources</directory>
+            </resource>
+        </resources>
     </build>
+
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <activation>
+                <!-- 默认为开发环境 -->
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <env.jdbc.url>jdbc:mysql://127.0.0.1:3306/fantail</env.jdbc.url>
+                <env.jdbc.username>root</env.jdbc.username>
+                <env.jdbc.password>admin</env.jdbc.password>
+            </properties>
+        </profile>
+        <profile>
+            <id>test</id>
+            <properties>
+                <env.jdbc.url>jdbc:mysql://127.0.0.1:3380/open_system_test</env.jdbc.url>
+                <env.jdbc.username>root</env.jdbc.username>
+                <env.jdbc.password>tiger</env.jdbc.password>
+            </properties>
+        </profile>
+        <profile>
+            <id>pro</id>
+            <properties>
+                <env.jdbc.url>jdbc:mysql://127.0.0.1:3380/open_system_pro</env.jdbc.url>
+                <env.jdbc.username>root</env.jdbc.username>
+                <env.jdbc.password>tiger</env.jdbc.password>
+            </properties>
+        </profile>
+    </profiles>
 
 </project>

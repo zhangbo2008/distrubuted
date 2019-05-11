@@ -2,7 +2,7 @@ package com.hc.hcbasic.controllers.filter;
 
 import com.google.gson.Gson;
 import com.hc.hcbasic.constant.UserStatusEnum;
-import com.hc.hcbasic.exceptions.UnloginException;
+import com.hc.hccommon.exceptions.UnloginException;
 import com.hc.hcsso.dtos.ResultBean;
 import lombok.extern.slf4j.Slf4j;
 

@@ -1,9 +1,9 @@
 package com.hc.hcbasic.controllers.aop;
 
 import com.hc.hcbasic.dtos.ResultBean;
-import com.hc.hcbasic.exceptions.CheckException;
-import com.hc.hcbasic.exceptions.NoPermissionException;
-import com.hc.hcbasic.exceptions.UnloginException;
+import com.hc.hccommon.exceptions.CheckException;
+import com.hc.hccommon.exceptions.NoPermissionException;
+import com.hc.hccommon.exceptions.UnloginException;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;

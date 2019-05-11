@@ -4,7 +4,7 @@ import com.hc.hcbasic.constant.UserStatusEnum;
 import com.hc.hcbasic.dao.UserDao;
 import com.hc.hcbasic.dtos.Data;
 import com.hc.hcbasic.dtos.RequestBean;
-import com.hc.hcbasic.exceptions.CheckException;
+import com.hc.hccommon.exceptions.CheckException;
 import com.hc.hcbasic.model.User;
 import com.hc.hcbasic.service.UserService;
 import com.hc.hcbasic.utils.LocaleMessageSourceUtil;
