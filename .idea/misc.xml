@@ -10,6 +10,8 @@
         <option value="$PROJECT_DIR$/hc-common/pom.xml" />
         <option value="$PROJECT_DIR$/hc-sso/pom.xml" />
         <option value="$PROJECT_DIR$/hc-sql/pom.xml" />
+        <option value="$PROJECT_DIR$/hc-client/pom.xml" />
+        <option value="$PROJECT_DIR$/hc-server/pom.xml" />
       </list>
     </option>
   </component>

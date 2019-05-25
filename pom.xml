@@ -22,12 +22,15 @@
         <module>hc-basic</module>
         <module>hc-common</module>
         <module>hc-sql</module>
+        <module>hc-client</module>
+        <module>hc-server</module>
     </modules>
 
     <properties>
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <hadoop.version>2.6.0-cdh5.7.0</hadoop.version>
+        <admin.version>2.0.3</admin.version>
     </properties>
 
     <dependencies>
@@ -178,53 +181,5 @@
         </dependency>
 
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-        <resources>
-            <resource>
-                <directory>hc-sso/src/main/resourcesd</directory>
-            </resource>
-            <resource>
-                <directory>hc-basic/src/main/resources</directory>
-            </resource>
-        </resources>
-    </build>
-
-    <profiles>
-        <profile>
-            <id>dev</id>
-            <activation>
-                <!-- 默认为开发环境 -->
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <properties>
-                <env.jdbc.url>jdbc:mysql://127.0.0.1:3306/fantail</env.jdbc.url>
-                <env.jdbc.username>root</env.jdbc.username>
-                <env.jdbc.password>admin</env.jdbc.password>
-            </properties>
-        </profile>
-        <profile>
-            <id>test</id>
-            <properties>
-                <env.jdbc.url>jdbc:mysql://127.0.0.1:3380/open_system_test</env.jdbc.url>
-                <env.jdbc.username>root</env.jdbc.username>
-                <env.jdbc.password>tiger</env.jdbc.password>
-            </properties>
-        </profile>
-        <profile>
-            <id>pro</id>
-            <properties>
-                <env.jdbc.url>jdbc:mysql://127.0.0.1:3380/open_system_pro</env.jdbc.url>
-                <env.jdbc.username>root</env.jdbc.username>
-                <env.jdbc.password>tiger</env.jdbc.password>
-            </properties>
-        </profile>
-    </profiles>
 
 </project>

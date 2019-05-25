@@ -4,7 +4,9 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/distributed.iml" filepath="$PROJECT_DIR$/.idea/distributed.iml" />
       <module fileurl="file://$PROJECT_DIR$/hc-basic/hc-basic.iml" filepath="$PROJECT_DIR$/hc-basic/hc-basic.iml" />
+      <module fileurl="file://$PROJECT_DIR$/hc-client/hc-client.iml" filepath="$PROJECT_DIR$/hc-client/hc-client.iml" />
       <module fileurl="file://$PROJECT_DIR$/hc-common/hc-common.iml" filepath="$PROJECT_DIR$/hc-common/hc-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/hc-server/hc-server.iml" filepath="$PROJECT_DIR$/hc-server/hc-server.iml" />
       <module fileurl="file://$PROJECT_DIR$/hc-sql/hc-sql.iml" filepath="$PROJECT_DIR$/hc-sql/hc-sql.iml" />
       <module fileurl="file://$PROJECT_DIR$/hc-sso/hc-sso.iml" filepath="$PROJECT_DIR$/hc-sso/hc-sso.iml" />
     </modules>

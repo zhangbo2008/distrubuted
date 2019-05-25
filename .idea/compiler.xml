@@ -6,22 +6,41 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="distributed" />
-        <module name="hc-basic" />
-        <module name="hc-common" />
+        <module name="hc-client" />
+        <module name="hc-server" />
         <module name="hc-sql" />
         <module name="hc-sso" />
+        <module name="distributed" />
+        <module name="hc-common" />
+        <module name="hc-basic" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="client" target="1.8" />
       <module name="distributed" target="1.8" />
+      <module name="hc-actuator" target="1.8" />
       <module name="hc-basic" target="1.8" />
+      <module name="hc-client" target="1.8" />
       <module name="hc-common" target="1.8" />
+      <module name="hc-server" target="1.8" />
       <module name="hc-sql" target="1.8" />
       <module name="hc-sso" target="1.8" />
       <module name="hc-sso-client" target="1.8" />
       <module name="hc-sso-server" target="1.8" />
+      <module name="server" target="1.8" />
     </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="distributed" options="-parameters" />
+      <module name="hc-actuator" options="-parameters" />
+      <module name="hc-basic" options="-parameters" />
+      <module name="hc-client" options="-parameters" />
+      <module name="hc-common" options="-parameters" />
+      <module name="hc-server" options="-parameters" />
+      <module name="hc-sql" options="-parameters" />
+      <module name="hc-sso" options="-parameters" />
+      <module name="server" options="-parameters" />
+    </option>
   </component>
 </project>
