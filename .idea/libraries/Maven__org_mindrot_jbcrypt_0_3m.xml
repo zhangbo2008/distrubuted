@@ -1,13 +1,13 @@
 <component name="libraryTable">
   <library name="Maven: org.mindrot:jbcrypt:0.3m">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/../../LocalMoven/org/mindrot/jbcrypt/0.3m/jbcrypt-0.3m.jar!/" />
+      <root url="jar://E:/JavaWeb/LocalMoven/org/mindrot/jbcrypt/0.3m/jbcrypt-0.3m.jar!/" />
     </CLASSES>
     <JAVADOC>
-      <root url="jar://$PROJECT_DIR$/../../LocalMoven/org/mindrot/jbcrypt/0.3m/jbcrypt-0.3m-javadoc.jar!/" />
+      <root url="jar://E:/JavaWeb/LocalMoven/org/mindrot/jbcrypt/0.3m/jbcrypt-0.3m-javadoc.jar!/" />
     </JAVADOC>
     <SOURCES>
-      <root url="jar://$PROJECT_DIR$/../../LocalMoven/org/mindrot/jbcrypt/0.3m/jbcrypt-0.3m-sources.jar!/" />
+      <root url="jar://E:/JavaWeb/LocalMoven/org/mindrot/jbcrypt/0.3m/jbcrypt-0.3m-sources.jar!/" />
     </SOURCES>
   </library>
 </component>
